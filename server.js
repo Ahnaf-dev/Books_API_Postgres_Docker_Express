@@ -1,18 +1,24 @@
 import express from 'express';
 import {KEYS} from "./config/keys.js";
 import {client} from './config/db.js'
+import { generateTables } from './sql/initTables.js';
+import authorRoutes from './routes/authorRoutes.js';
+import fs from "fs";
 const app = express();
 
-app.get("/", (req, res) => {
-  res.send("Api is running");
-})
+
+// routes
+app.use("/api/authors", authorRoutes);
 
 app.listen(KEYS.PORT, async () => {
   console.log(`Server running on Port ${KEYS.PORT}`);
-  // console.log(`postgresql://${KEYS.DB_USER}:${KEYS.DB_PASSWORD}@${KEYS.DB_HOST}:${KEYS.DB_PORT}/${KEYS.DB_NAME}`)
   try {
     await client.connect();
     console.log('DB Connected')
+
+    // iniate tables
+    await generateTables();
+   
   } catch(err) {
     console.log(err)
   }
