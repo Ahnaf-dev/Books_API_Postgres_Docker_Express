@@ -1,3 +1,3 @@
 INSERT INTO author(firstname, lastname, email)
-VALUES ("James", "Smith", "jamessmith@gmail.com")
+VALUES ($1, $2, $3)
 RETURNING *;
